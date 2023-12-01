@@ -1,10 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
+import React from "react";
 
-export default function Home() {
+const page = () => {
   return (
-    <div className="">
-      <h1 className="text-3xl text-blue-text">Dashboard</h1>
+    <div className="text-white bg-bgColor-trinary">
+      Login Page will be here probs
     </div>
   );
-}
+};
+
+export default page;
