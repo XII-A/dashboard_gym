@@ -1,15 +1,17 @@
 import React from "react";
 import Image from "next/image";
+import image from "../../public/girl.png";
+import { eslint } from "../../next.config";
 
-const introCard = () => {
+const IntroCard = ({ icon }) => {
   return (
-    <div className="h-screen w-screen">
+    <div className="">
       <div className="text-white">hello</div>
       <div>
-        <Image width={500} height={500} src="public/GirlStretching.png" />
+        <Image width={500} height={500} src={image} />
       </div>
     </div>
   );
 };
 
-export default introCard;
+export default IntroCard;

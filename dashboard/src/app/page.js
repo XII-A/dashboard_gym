@@ -1,5 +1,5 @@
 import React from "react";
-import introCard from "../components/introCard.jsx";
+import introCard from "../components/IntroCard.jsx";
 
 const page = () => {
   return (
