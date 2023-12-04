@@ -1,19 +1,19 @@
+import SideBar from "@/components/SideBar";
+import Header from "@/components/Header";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 
 export default function RootLayout({ children }) {
   return (
-    <div class="min-h-screen flex flex-col">
-      <div className="flex flex-row ">
-        <div class="w-60 bg-purple-200 min-h-screen">
-          Sidebar here
-          <div className="flex flex-col justify-between">
-            <Link href="/MainPage/DietPlan">Diet Plan</Link>
-            <Link href="/MainPage/Workout">Workout</Link>
-          </div>
+    <div class="flex flex-col">
+      <div className="flex flex-row min-h-screen">
+        <div class="w-64 bg-purple-500">
+          <SideBar />
         </div>
         <div class="bg-red-50 w-full">
-          <div className="bg-red-800 h-20">Header here</div>
+          <div className="bg-red-800 h-20">
+            <Header />
+          </div>
           Content here
           {children}
         </div>
