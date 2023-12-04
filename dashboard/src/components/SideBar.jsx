@@ -36,7 +36,7 @@ const SideBar = () => {
       icon: <SlBadge size={20} />,
     },
     {
-      path: "/MainPage/Schedule",
+      path: "/MainPage/MySchedule",
       name: "My Schedule",
       icon: <LuCalendarDays size={20} />,
     },
