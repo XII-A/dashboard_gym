@@ -1,6 +1,4 @@
 import React from "react";
-import ScheduleComponent from "@/components/ScheduleComponent";
-import GoalComponent from "@/components/GoalComponent";
 
 const page = () => {
   return (
