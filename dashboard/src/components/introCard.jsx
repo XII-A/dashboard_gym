@@ -1,6 +1,5 @@
-import React from "react";
+
 import Image from "next/image";
-import { FaCircle } from "react-icons/fa";
 import { eslint } from "../../next.config";
 
 const IntroCard = ({ image, title, subtitle }) => {
