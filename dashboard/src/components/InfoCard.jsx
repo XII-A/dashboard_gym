@@ -6,6 +6,7 @@ import { RiFireLine } from "react-icons/ri";
 import { IoFootstepsOutline } from "react-icons/io5";
 import { AiOutlinePercentage } from "react-icons/ai";
 import { IoWaterOutline } from "react-icons/io5";
+import Image from "next/image";
 import lines1 from "../../public/lines1.svg";
 import lines2 from "../../public/lines2.svg";
 import lines3 from "../../public/lines3.svg";
@@ -23,7 +24,8 @@ const InfoCard = ({ parameter, value }) => {
       subtitle = `${value}`;
       bgColor = "#06B6D4";
       iconColor = "#0891B2";
-      gradient = <img src={lines1.src} />;
+      gradient = "/lines1.svg";
+
       break;
     case "steps":
       icon = <IoFootstepsOutline className="w-8 h-8" />;
@@ -31,7 +33,8 @@ const InfoCard = ({ parameter, value }) => {
       subtitle = `${value}`;
       bgColor = "#8B5CF6";
       iconColor = "#6D28D9";
-      gradient = <img src={lines3.src} />;
+      gradient = "/lines3.svg";
+
       break;
     case "calories":
       icon = <RiFireLine className="w-8 h-8" />;
@@ -39,7 +42,8 @@ const InfoCard = ({ parameter, value }) => {
       subtitle = `${value}`;
       bgColor = "#F97316";
       iconColor = "#EA580C";
-      gradient = <img src={lines2.src} />;
+      gradient = "/lines2.svg";
+
       break;
     case "water":
       icon = <IoWaterOutline className="w-8 h-8" />;
@@ -47,7 +51,7 @@ const InfoCard = ({ parameter, value }) => {
       subtitle = `${value}`;
       bgColor = "#007EA7";
       iconColor = "#1D669B";
-      gradient = <img src={lines4.src} />;
+      gradient = "/lines4.svg";
       break;
     case "sleep":
       icon = <IoMoonOutline className="w-8 h-8 " />;
@@ -55,7 +59,7 @@ const InfoCard = ({ parameter, value }) => {
       subtitle = `${value}`;
       bgColor = "#383838";
       iconColor = "#131313";
-      gradient = <img className="mt-3" src={lines5.src} />;
+      gradient = "/lines5.svg";
       break;
     case "fat":
       icon = <AiOutlinePercentage className="w-8 h-8" />;
@@ -63,7 +67,7 @@ const InfoCard = ({ parameter, value }) => {
       subtitle = `${value}`;
       bgColor = "#D1D51F";
       iconColor = "#AFBD0D";
-      gradient = <img src={lines6.src} />;
+      gradient = "/lines6.svg";
       break;
 
     default:
@@ -74,7 +78,14 @@ const InfoCard = ({ parameter, value }) => {
   }
 
   return (
-    <div className="rounded-xl m-5" style={{ backgroundColor: bgColor }}>
+    <div
+      className="rounded-xl w-full h-full bg-no-repeat bg-cover"
+      style={{
+        backgroundColor: bgColor,
+        backgroundImage: `url(${gradient})`,
+        backgroundSize: "cover",
+      }}
+    >
       <div className="flex justify-between p-5">
         <div className="flex">
           {icon && (
@@ -92,7 +103,6 @@ const InfoCard = ({ parameter, value }) => {
         </div>
         <AddButton iconColor={iconColor} />
       </div>
-      {gradient && <div>{gradient}</div>}
     </div>
   );
 };

@@ -7,7 +7,7 @@ export default function RootLayout({ children }) {
   return (
     <div class="flex flex-row h-full ">
       <div className="flex flex-row ">
-        <div class="w-64 bg-purple-500">
+        <div class="w-64 bg-purple-500 ">
           <SideBar />
         </div>
       </div>
