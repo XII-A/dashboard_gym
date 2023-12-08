@@ -11,12 +11,18 @@ export default function RootLayout({ children }) {
           <SideBar />
         </div>
       </div>
-      <div class="bg-red-50 w-full h-full flex flex-col">
-        <div className="bg-red-800 h-20">
+      <div class="bg-red-50 w-full  flex flex-col box-border">
+        <div className="h-20">
           <Header />
         </div>
 
-        <div className="h-full">{children}</div>
+        <div
+          style={{
+            height: "calc(100vh - 5rem)",
+          }}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

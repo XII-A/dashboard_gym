@@ -1,16 +1,28 @@
 import React from "react";
+import Image from "next/image";
 
-const ScheduleComponent = ({ day, imageData, exerciseName, exerciseTime, sets }) => {
+const ScheduleComponent = ({
+  day,
+  imageData,
+  exerciseName,
+  exerciseTime,
+  sets,
+}) => {
   return (
     <>
-      <div className="flex-col  bg-bgColor-trinary w-full h-20 rounded-lg text-white px-2 py-1" style={{ height: 'auto' }}>
-        <div className="text-lg">{day}</div>
+      <div className="flex-col  bg-bgColor-trinary  h-28 rounded-lg text-white p-4   drop-shadow-gray">
+        <div className="text-lg mb-2">{day}</div>
         <div className="flex justify-between items-center">
-          <div className="flex  items-center">
-            <img src={imageData} className="w-10 h-10 mr-2" />
+          <div className="flex  items-center gap-2">
+            <Image
+              src={imageData}
+              className="object-contain mr-2"
+              width={40}
+              height={40}
+            />
             <div>
-                <div className="text-l">{exerciseName}</div>
-                <div className="text-sm">{exerciseTime}</div>
+              <div className="text-l">{exerciseName}</div>
+              <div className="text-sm">{exerciseTime}</div>
             </div>
           </div>
           <div className="text-blue-text">{sets}</div>
