@@ -16,6 +16,25 @@
   }
 }
 
+/* Scroll bar stylings */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--lightestgrey);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(159, 159, 159);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+
 body {
   background-color: #090707;
   height: 100vh;

@@ -1,10 +1,9 @@
-
 import Image from "next/image";
 import { eslint } from "../../next.config";
 
 const IntroCard = ({ image, title, subtitle }) => {
   return (
-    <div className="overflow-hidden flex relative h-[173px] rounded-xl  my-5 ml-5 mr-[8rem] ">
+    <div className="overflow-hidden flex relative h-full rounded-xl   ">
       <div className=" p-7 bg-blue-default  rounded-xl flex-column  ">
         <div className="z-90 w-[64px] h-[64px] left-[-24px] bottom-[-24px] absolute bg-sky-500 bg-opacity-60 rounded-full" />
         <div className="z-90 w-[128px] h-[128px] left-[-32px] bottom-[-32px] absolute bg-sky-500 bg-opacity-60 rounded-full" />
