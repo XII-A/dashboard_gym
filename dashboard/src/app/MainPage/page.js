@@ -1,3 +1,4 @@
+"use client";
 import InfoCard from "../../components/InfoCard";
 import IntroCard from "../../components/IntroCard";
 import image from "../../../public/girl.png";
@@ -5,10 +6,26 @@ import { FaAngleRight } from "react-icons/fa";
 import ScheduleComponent from "@/components/ScheduleComponent";
 import GoalComponent from "@/components/GoalComponent";
 
+import { signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+
 export default function Home() {
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/signin");
+    },
+  });
   return (
     <div className="grid grid-cols-4  bg-bgColor-primary h-full ">
       <div className="col-span-3">
+        <div>
+          <h1>Testing auth</h1>
+          <div className="w-full text-red-500 bg-white">
+            {session.data?.user?.email}
+          </div>
+          <button onClick={() => signOut()}>Logout</button>
+        </div>
         <div className="flex flex-col w-full p-4">
           <div className="w-full mb-2 ">
             <IntroCard
@@ -92,3 +109,4 @@ export default function Home() {
     </div>
   );
 }
+Home.requireAuth = true;
