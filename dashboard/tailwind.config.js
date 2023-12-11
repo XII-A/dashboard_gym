@@ -50,7 +50,7 @@ module.exports = {
       manrope: ["Manrope", "sans-serif"],
     },
     dropShadow: {
-      gray: "0px 4px 4px rgba(159, 159, 159, 0.25)",
+      gray: "0px 8px 5px rgba(159, 159, 159, 0.25)",
     },
   },
   plugins: [require("tailwindcss-animate")],

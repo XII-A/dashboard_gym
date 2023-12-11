@@ -1,3 +1,4 @@
+"use client";
 import InfoCard from "../../components/InfoCard";
 import IntroCard from "../../components/IntroCard";
 import image from "../../../public/girl.png";
@@ -5,12 +6,20 @@ import { FaAngleRight } from "react-icons/fa";
 import ScheduleComponent from "@/components/ScheduleComponent";
 import GoalComponent from "@/components/GoalComponent";
 
+// import { signOut, useSession } from "next-auth/react";
+import { signOut } from "firebase/auth";
+import { auth } from "@/app/firebase";
+import { redirect } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 export default function Home() {
+  const [user] = useAuthState(auth);
+
   return (
     <div className="grid grid-cols-4  bg-bgColor-primary h-full ">
       <div className="col-span-3">
         <div className="flex flex-col w-full p-4">
-          <div className="w-full mb-2 ">
+          <div className="w-full mb-4 ">
             <IntroCard
               image={image}
               title={"Track Your Daily Activities"}
@@ -40,7 +49,7 @@ export default function Home() {
             </button>
           </div>
           {/* Body */}
-          <div className="mt-3 flex flex-col gap-4 overflow-y-scroll px-2">
+          <div className="mt-3 flex flex-col gap-4 overflow-y-scroll px-2 pb-1 h-full ">
             <ScheduleComponent
               imageData={"/back&Stretch.png"}
               day={"Monday"}
@@ -58,7 +67,7 @@ export default function Home() {
           </div>
         </div>
         {/* Goals */}
-        <div className="w-full flex flex-col h-1/2">
+        <div className="w-full flex flex-col h-1/2 ">
           {/* Header */}
           <div className="flex flex-row items-center justify-between px-2 mt-2">
             <div className="text-xl font-medium text-white">Goals</div>
@@ -70,7 +79,7 @@ export default function Home() {
             </button>
           </div>
           {/* Body */}
-          <div className="mt-3 flex flex-col gap-4 overflow-y-scroll px-2">
+          <div className="mt-3 flex flex-col gap-4 overflow-y-scroll px-2 pb-4">
             <GoalComponent
               exerciseName={"ABS & Stretch"}
               exerciseTime={"Saturday, April 14 | 08:00 AM"}

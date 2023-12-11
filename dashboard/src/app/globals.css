@@ -33,9 +33,33 @@
   border-radius: 5px;
 }
 
-/* Handle on hover */
+/* changing input color */
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: all 500000s ease-in-out 0s;
+  -webkit-box-shadow: 0 0 0 42px rgba(25, 28, 31, 0) inset !important;
+  -webkit-text-fill-color: white !important;
+}
 
 body {
   background-color: #090707;
   height: 100vh;
+}
+
+.rdp {
+  background-color: #191c1f;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+#radix-\:r1\: {
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+
+  /* border-collapse: separate; */
+  outline: 2px solid rgba(255, 255, 255, 0.1);
+  outline-offset: 0.02cm;
 }
