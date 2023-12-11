@@ -1,14 +1,30 @@
 "use client";
-import { signIn } from "next-auth/react";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
+
 export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+  const handlesingin = async () => {
+    try {
+      const res = await signInWithEmailAndPassword(email, password);
+      console.log(res);
+      setEmail("");
+      setPassword("");
+      router.push("/MainPage");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 font-manrope bg-bgColor-secondary">
@@ -81,14 +97,7 @@ export default function Signin() {
 
             <div>
               <button
-                onClick={() =>
-                  signIn("credentials", {
-                    email,
-                    password,
-                    redirect: true,
-                    callbackUrl: "/MainPage",
-                  })
-                }
+                onClick={() => handlesingin()}
                 disabled={!email || !password}
                 className="disabled:opacity-40 flex w-full justify-center rounded-md bg-blue-default px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-light"
               >

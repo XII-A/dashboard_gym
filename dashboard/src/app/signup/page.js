@@ -1,8 +1,18 @@
 "use client";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+
+//FIREBASE IMPORTS
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import { auth } from "../firebase";
+import { useEffect, useRef, useState } from "react";
+import { db } from "@/app/firebase";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { storage } from "@/app/firebase";
+import { getDownloadURL, uploadBytes } from "firebase/storage";
+import { updateDoc } from "firebase/firestore";
+import { ref } from "firebase/storage";
+// COMPONENT IMPORTS
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,10 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { format } from "date-fns";
 import { FaRegCalendar } from "react-icons/fa6";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -25,14 +33,21 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+//TODO: Fix Calender Inputs
+//TODO: Add input validation
+
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("");
   const [initialSignUp, setInitialSignUp] = useState(false);
-  const [error, setError] = useState(null);
+  const [filetoupload, setFiletoupload] = useState(null);
   const [date, setDate] = useState(new Date());
-  const ref = useRef(null);
+  const [errorSignUp, setErrorSignUp] = useState(null);
+  const router = useRouter();
+  const reftoImage = useRef(null);
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
   const [userInfo, setUserInfo] = useState({
     firstName: null,
     lastName: null,
@@ -40,31 +55,74 @@ export default function Signup() {
     email: null,
     height: null,
     weight: null,
-    imageUrl: null,
     gymId: null,
   });
 
+  useEffect(() => {
+    console.log(date);
+  }, [date]);
+  const [currentUser, setCurrentUser] = useState(null);
+
   const signup = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
+      const user = await createUserWithEmailAndPassword(email, password);
+      setCurrentUser(user.user);
       console.log(user);
+
       setInitialSignUp(true);
-      setError(null);
     } catch (error) {
-      setError(error.message);
+      console.log(error);
       setTimeout(() => {
-        setError(null);
+        setErrorSignUp(null);
       }, 5000);
+    }
+  };
+  const handleCreatingDoc = async () => {
+    try {
+      const docRef = await setDoc(doc(db, "Users", currentUser.uid), {
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        birthday: date,
+        email: email,
+        height: userInfo.height,
+        weight: userInfo.weight,
+        gymId: userInfo.gymId,
+      });
+      if (filetoupload !== null) {
+        const imageRef = ref(storage, `ProfilePics/${currentUser.uid}`);
+        await uploadBytes(imageRef, filetoupload, {
+          contentType: "image/jpeg",
+        }).then(async (snapshot) => {
+          const downloadURL = await getDownloadURL(imageRef);
+          console.log(downloadURL);
+          await updateDoc(doc(db, "Users", currentUser.uid), {
+            imageUrl: downloadURL,
+          });
+        });
+      }
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+  const handleFinlizingSignIn = async (e) => {
+    e.preventDefault();
+    const doc = await handleCreatingDoc();
+    //if there was no error in creating the doc push to main page
+    if (doc) {
+      router.push("/MainPage");
     }
   };
 
   const handleImageInput = (e) => {
     const file = e.target.files[0];
+    console.log(file);
+    setFiletoupload(e.target.files[0]);
     let imageUrl = URL.createObjectURL(file);
-    setUserInfo({ ...userInfo, imageUrl });
-    ref.current.src = imageUrl;
-    ref.current.onload = () => {
-      URL.revokeObjectURL(ref.current.src);
+    reftoImage.current.src = imageUrl;
+    reftoImage.current.onload = () => {
+      URL.revokeObjectURL(reftoImage.current.src);
     };
 
     console.log(e.target.files[0]);
@@ -101,7 +159,9 @@ export default function Signup() {
                   Email address
                 </label>
                 <div className="mt-2">
-                  {error && <div className="text-red-500 text-sm">{error}</div>}
+                  {errorSignUp && (
+                    <div className="text-red-500 text-sm">{error}</div>
+                  )}
                 </div>
 
                 <div className="mt-2">
@@ -178,23 +238,24 @@ export default function Signup() {
         {initialSignUp && (
           <div className="flex flex-col mt-4 gap-3 items-center justify-center">
             {/* Image input */}
-            <div class="flex items-center space-x-6">
-              <div class="shrink-0">
-                <div class="relative w-10 h-10 overflow-hidden bg-bgColor-primary rounded-full ">
+            <div className="flex items-center space-x-6">
+              <div className="shrink-0">
+                <div className="relative w-10 h-10 overflow-hidden bg-bgColor-primary rounded-full ">
                   <Image
                     src="/emptyAvatar.svg"
                     alt="avatar"
                     width={50}
                     height={50}
                     className="object-contain"
-                    ref={ref}
+                    ref={reftoImage}
                   />
                 </div>
               </div>
-              <label class="block">
-                <span class="sr-only">Choose profile photo</span>
+              <label className="block">
+                <span className="sr-only">Choose profile photo</span>
                 <input
                   type="file"
+                  accept=".png, .jpg,.jpeg"
                   onChange={handleImageInput}
                   className="block w-full text-sm text-white/90 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-default file:text-white hover:file:bg-white/90 hover:file:text-blue-default file:shadow-sm "
                 />
@@ -209,6 +270,7 @@ export default function Signup() {
                 onChange={(e) =>
                   setUserInfo({ ...userInfo, firstName: e.target.value })
                 }
+                pattern="[a-zA-Z]+"
                 required
                 placeholder="First Name"
                 className="bg-white/5 hover:bg-white/10 focus:ring-opacity-0 focus:outline-none placeholder:text-white/50 text-white/80 shadow-sm ring-1 ring-inset ring-white/10"
@@ -220,6 +282,7 @@ export default function Signup() {
                 onChange={(e) =>
                   setUserInfo({ ...userInfo, lastName: e.target.value })
                 }
+                pattern="[a-zA-Z]+"
                 required
                 placeholder="Last Name"
                 className="bg-white/5 hover:bg-white/10 focus:ring-opacity-0 focus:outline-none placeholder:text-white/50 text-white/90 shadow-sm ring-1 ring-inset ring-white/10"
@@ -230,6 +293,7 @@ export default function Signup() {
                 id="weight"
                 name="weight"
                 type="weight"
+                pattern="[0-9]{1,3}"
                 onChange={(e) =>
                   setUserInfo({ ...userInfo, weight: e.target.value })
                 }
@@ -241,6 +305,7 @@ export default function Signup() {
                 id="height"
                 name="height"
                 type="height"
+                pattern="[0-9]{1,3}"
                 onChange={(e) =>
                   setUserInfo({ ...userInfo, height: e.target.value })
                 }
@@ -250,28 +315,33 @@ export default function Signup() {
               />
             </div>
             <div className="flex flex-row w-full">
-              <Select>
+              <Select
+                onValueChange={(value) => {
+                  console.log(value);
+                  setUserInfo({ ...userInfo, gymId: value });
+                }}
+              >
                 <SelectTrigger className="w-full border-white/10 bg-white/5 text-white/90  hover:bg-white/10 ">
                   <SelectValue placeholder="Select Your Gym" />
                 </SelectTrigger>
                 <SelectContent className="w-full border-white/10 bg-[rgb(25,28,31)] text-white/50 ">
                   <SelectItem
-                    value="light"
+                    value="Super Gym"
                     className="w-full  focus:bg-white/5 focus:text-white/90"
                   >
-                    Light
+                    Super Gym
                   </SelectItem>
                   <SelectItem
-                    value="dark"
+                    value="Fitness Gym"
                     className="w-full  focus:bg-white/5 focus:text-white/90"
                   >
-                    Dark
+                    Fitness Gym
                   </SelectItem>
                   <SelectItem
-                    value="system"
+                    value="Star Gym"
                     className="w-full  focus:bg-white/5 focus:text-white/90"
                   >
-                    System
+                    Star Gym
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -300,6 +370,22 @@ export default function Signup() {
                   />
                 </PopoverContent>
               </Popover>
+            </div>
+            <div className="flex flex-row w-full items-center justify-center">
+              <button
+                onClick={(e) => handleFinlizingSignIn(e)}
+                type="submit"
+                className="disabled:opacity-40 flex w-full justify-center rounded-md bg-blue-default px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-light"
+                disabled={
+                  !userInfo.firstName ||
+                  !userInfo.lastName ||
+                  !userInfo.weight ||
+                  !userInfo.height ||
+                  !userInfo.gymId
+                }
+              >
+                Finish Signing Up
+              </button>
             </div>
           </div>
         )}

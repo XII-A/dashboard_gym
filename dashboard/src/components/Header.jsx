@@ -1,10 +1,22 @@
+"use client";
 import React from "react";
 import { RiSearchLine } from "react-icons/ri";
 import { Input } from "@/components/ui/input";
 import { IoIosNotifications } from "react-icons/io";
 import { IoMdSettings } from "react-icons/io";
 import Image from "next/image";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
+import { app } from "@/app/firebase";
+import { getStorage, ref as storageRef } from "firebase/storage";
+import { useDownloadURL } from "react-firebase-hooks/storage";
 const Header = () => {
+  const [user] = useAuthState(auth);
+  const storage = getStorage(app);
+  const [value, loading, error] = useDownloadURL(
+    storageRef(storage, `ProfilePics/${user?.uid}`)
+  );
+
   return (
     <div className="flex flex-row items-center py-6 px-8 bg-bgColor-secondary h-full ">
       {/* Welcome Message */}
@@ -24,13 +36,13 @@ const Header = () => {
         <IoIosNotifications size={24} className="text-white cursor-pointer" />
         <IoMdSettings size={24} className="text-white cursor-pointer" />
 
-        <Image
-          class="w-10 h-10 rounded-full cursor-pointer"
-          src="/person3.png"
-          alt="Rounded avatar"
-          width={40}
-          height={40}
-        />
+        {loading ? (
+          <div className="bg-white rounded-full w-16 h-16 flex flex-row items-center justify-center">
+            <div className="animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-default"></div>
+          </div>
+        ) : (
+          <Image src={value} width={40} height={40} className="rounded-full" />
+        )}
       </div>
     </div>
   );
