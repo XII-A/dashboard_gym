@@ -30,6 +30,9 @@ export const authOptions = {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(error);
+          })
+          .finally(() => {
+            console.log("finally");
           });
       },
     }),

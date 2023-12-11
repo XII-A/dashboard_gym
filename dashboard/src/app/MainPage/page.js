@@ -16,6 +16,7 @@ export default function Home() {
       redirect("/signin");
     },
   });
+  console.log(session.data.user);
   return (
     <div className="grid grid-cols-4  bg-bgColor-primary h-full ">
       <div className="col-span-3">

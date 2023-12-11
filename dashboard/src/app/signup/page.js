@@ -1,7 +1,7 @@
 "use client";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { auth } from "../firebase";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
@@ -32,6 +32,7 @@ export default function Signup() {
   const [initialSignUp, setInitialSignUp] = useState(false);
   const [error, setError] = useState(null);
   const [date, setDate] = useState(new Date());
+  const ref = useRef(null);
   const [userInfo, setUserInfo] = useState({
     firstName: null,
     lastName: null,
@@ -55,6 +56,18 @@ export default function Signup() {
         setError(null);
       }, 5000);
     }
+  };
+
+  const handleImageInput = (e) => {
+    const file = e.target.files[0];
+    let imageUrl = URL.createObjectURL(file);
+    setUserInfo({ ...userInfo, imageUrl });
+    ref.current.src = imageUrl;
+    ref.current.onload = () => {
+      URL.revokeObjectURL(ref.current.src);
+    };
+
+    console.log(e.target.files[0]);
   };
 
   return (
@@ -168,25 +181,21 @@ export default function Signup() {
             <div class="flex items-center space-x-6">
               <div class="shrink-0">
                 <div class="relative w-10 h-10 overflow-hidden bg-bgColor-primary rounded-full ">
-                  <svg
-                    class="absolute w-12 h-12 text-bgColor-trinary -left-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
+                  <Image
+                    src="/emptyAvatar.svg"
+                    alt="avatar"
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                    ref={ref}
+                  />
                 </div>
               </div>
               <label class="block">
                 <span class="sr-only">Choose profile photo</span>
                 <input
                   type="file"
-                  onchange="loadFile(event)"
+                  onChange={handleImageInput}
                   className="block w-full text-sm text-white/90 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-default file:text-white hover:file:bg-white/90 hover:file:text-blue-default file:shadow-sm "
                 />
               </label>
