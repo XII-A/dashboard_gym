@@ -6,9 +6,9 @@ import foodImage from "../../../../public/food.png";
 
 const page = () => {
   return (
-    <div className="grid grid-cols-4  bg-bgColor-primary h-full ">
-      <div className="col-span-3">
-        <div className="flex flex-col w-full p-4">
+    <div className="grid grid-cols-4  bg-bgColor-primary h-full box-border overflow-hidden">
+      <div className="col-span-3 h-full">
+        <div className="flex flex-col w-full p-4 h-full">
           <div className="w-full mb-2 ">
             <IntroCard
               image={foodImage}
@@ -20,16 +20,16 @@ const page = () => {
           </div>
 
           <div className="flex  items-center bg-bgColor-primary p-4">
-            <div className="w-10"></div> 
-            <div className="grid grid-cols-5 flex-row justify-between w-full text-blue-default">
+            <div className="w-10"></div>
+            <div className="grid grid-cols-5   w-full text-blue-default">
               <div>Food</div>
-              <div>Meal</div>
+              <div className="px-2">Meal</div>
               <div>Calories</div>
               <div>Time</div>
               <div>Carbs</div>
             </div>
           </div>
-          <div className="flex flex-col justify-between gap-4 h-52 text-white">
+          <div className="flex flex-col justify-between gap-4 h-[60%] pb-4 px-2 text-white overflow-y-scroll">
             <FoodList />
           </div>
         </div>
