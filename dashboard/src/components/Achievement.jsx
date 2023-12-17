@@ -4,7 +4,6 @@ import { IoFootstepsOutline } from "react-icons/io5";
 import { MdOutlineSportsGymnastics } from "react-icons/md";
 import { GiWeightLiftingUp } from "react-icons/gi";
 import { CiStopwatch } from "react-icons/ci";
-import { CiDumbbell } from "react-icons/ci";
 
 const Achievement = ({ icon, value }) => {
   let title, subtitle;

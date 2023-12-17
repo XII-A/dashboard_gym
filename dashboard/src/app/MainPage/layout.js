@@ -11,14 +11,14 @@ export default function RootLayout({ children }) {
           <SideBar />
         </div>
       </div>
-      <div class="bg-red-50 w-full  flex flex-col box-border">
+      <div class="bg-bgColor-primary w-full  flex flex-col box-border">
         <div className="h-20">
           <Header />
         </div>
 
         <div
           style={{
-            height: "calc(100vh - 5rem)",
+            height: "100%",
           }}
         >
           {children}

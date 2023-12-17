@@ -47,7 +47,7 @@ input:-webkit-autofill:active {
 
 body {
   background-color: #090707;
-  height: 100vh;
+  height: 100%;
 }
 
 .rdp {
