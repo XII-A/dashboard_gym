@@ -80,14 +80,14 @@ const InfoCard = ({ parameter, value }) => {
           {icon && (
             <div
               style={{ backgroundColor: iconColor }}
-              className="rounded-md p-2 mr-3"
+              className="rounded-md text-gray-50 p-2 mr-3"
             >
               {icon}
             </div>
           )}
           <div>
-            <div className="text-xl">{title}</div>
-            <div className="font-thin text-sm">{subtitle}</div>
+            <div className="text-xl text-gray-50">{title}</div>
+            <div className="font-thin text-sm text-gray-50">{subtitle}</div>
           </div>
         </div>
         <AddButton iconColor={iconColor} />
