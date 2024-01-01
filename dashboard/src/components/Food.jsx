@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Food = ({ image, food, meal, calories, time, carbs }) => {
   return (
-    <div className="flex-col  bg-bgColor-trinary  h-auto rounded-lg text-white p-4   drop-shadow-gray">
+    <div className="flex-col  bg-bgColor-trinary  h-auto rounded-lg text-white p-4">
       <div className="flex  items-center">
         <div className="flex relative w-10 h-10 bg-blue-text overflow-hidden rounded-full items-center justify-center">
           <Image
