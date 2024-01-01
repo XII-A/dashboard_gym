@@ -57,6 +57,7 @@ export default function Signin() {
                   id="email"
                   name="email"
                   type="email"
+                  
                   autoComplete="email"
                   onChange={(e) => setEmail(e.target.value)}
                   required
