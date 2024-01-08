@@ -1,22 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { RiSearchLine } from "react-icons/ri";
 import { Input } from "@/components/ui/input";
 import { IoIosNotifications } from "react-icons/io";
 import { IoMdSettings } from "react-icons/io";
 import Image from "next/image";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase";
-import { app } from "@/app/firebase";
-import { getStorage, ref as storageRef } from "firebase/storage";
-import { useDownloadURL } from "react-firebase-hooks/storage";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 const Header = () => {
-  const [user] = useAuthState(auth);
-  const storage = getStorage(app);
-  const [value, loading, error] = useDownloadURL(
-    storageRef(storage, `ProfilePics/${user?.uid}`)
-  );
+  const [loading, setLoading] = useState(true);
+  const { data: session } = useSession();
+  const [image, setImage] = useState(null);
 
+  useEffect(() => {
+    if (session) {
+      setImage(session.user.user.profilepicUrl);
+      setLoading(false);
+    }
+  }, [session]);
   return (
     <div className="flex flex-row items-center py-6 px-8 bg-bgColor-secondary h-full ">
       {/* Welcome Message */}
@@ -37,11 +38,25 @@ const Header = () => {
         <IoMdSettings size={24} className="text-white cursor-pointer" />
 
         {loading ? (
-          <div className="bg-white rounded-full w-16 h-16 flex flex-row items-center justify-center">
+          <div className="bg-transparent rounded-full w-16 h-16 flex flex-row items-center justify-center">
             <div className="animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-default"></div>
           </div>
+        ) : image ? (
+          <Image
+            src={image}
+            width={40}
+            height={40}
+            className="rounded-full"
+            alt="profileimage"
+          />
         ) : (
-          <Image src={value} width={40} height={40} className="rounded-full" />
+          <Image
+            src="/emptyAvatar.svg"
+            width={40}
+            height={40}
+            className="rounded-full"
+            alt="profileimage"
+          />
         )}
       </div>
     </div>

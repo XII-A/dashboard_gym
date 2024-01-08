@@ -81,10 +81,9 @@ const SideBar = () => {
         </div>
         <div className="flex flex-row items-center justify-start gap-4 text-white px-4 py-3  border border-transparent rounded-md bg-transparent w-5/6 transition duration-300 ease-linear cursor-pointer">
           <HiOutlineLogout size={20} style={{ transform: "rotate(180deg)" }} />
-          <div className="font-medium text-sm" onClick={() => {
-            signOut(auth);
-            
-          }}>Logout</div>
+          <div className="font-medium text-sm" onClick={() => {}}>
+            Logout
+          </div>
         </div>
       </div>
     </div>

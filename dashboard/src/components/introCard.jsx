@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { eslint } from "../../next.config";
+
 
 const IntroCard = ({ image, title, subtitle }) => {
   return (

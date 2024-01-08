@@ -17,9 +17,8 @@ export default function RootLayout({ children }) {
         </div>
 
         <div
-          style={{
-            height: "100%",
-          }}
+          className="flex flex-col   overflow-y-scroll"
+          style={{ height: "calc(100vh - 5rem)" }}
         >
           {children}
         </div>

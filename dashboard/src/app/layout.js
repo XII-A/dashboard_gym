@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Provider from "./Provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,7 +12,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={"font-manrope light"}>{children}</body>
+      <body className={"font-manrope light"}>
+        <Provider>{children}</Provider>
+      </body>
     </html>
   );
 }

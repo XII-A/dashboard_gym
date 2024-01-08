@@ -33,10 +33,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-//TODO: Fix Calender Inputs
-//TODO: Add input validation
-
 export default function Signup() {
+  //TODO: Add input validation
+  //TODO: Fix Calender Inputs
+  //TODO: ADD SOMETHING TO CHECK THE FIRST STEP OF SIGNUP
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("");
@@ -46,72 +46,30 @@ export default function Signup() {
   const [errorSignUp, setErrorSignUp] = useState(null);
   const router = useRouter();
   const reftoImage = useRef(null);
-  const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
   const [userInfo, setUserInfo] = useState({
-    firstName: null,
-    lastName: null,
+    name: null,
+    surname: null,
+    username: null,
     birthday: null,
     email: null,
     height: null,
     weight: null,
-    gymId: null,
+    profilepicUrl: null,
+    gym: null,
   });
 
   useEffect(() => {
     console.log(date);
   }, [date]);
-  const [currentUser, setCurrentUser] = useState(null);
 
   const signup = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(email, password);
-      setCurrentUser(user.user);
-      console.log(user);
-
       setInitialSignUp(true);
     } catch (error) {
       console.log(error);
       setTimeout(() => {
         setErrorSignUp(null);
       }, 5000);
-    }
-  };
-  const handleCreatingDoc = async () => {
-    try {
-      const docRef = await setDoc(doc(db, "Users", currentUser.uid), {
-        firstName: userInfo.firstName,
-        lastName: userInfo.lastName,
-        birthday: date,
-        email: email,
-        height: userInfo.height,
-        weight: userInfo.weight,
-        gymId: userInfo.gymId,
-      });
-      if (filetoupload !== null) {
-        const imageRef = ref(storage, `ProfilePics/${currentUser.uid}`);
-        await uploadBytes(imageRef, filetoupload, {
-          contentType: "image/jpeg",
-        }).then(async (snapshot) => {
-          const downloadURL = await getDownloadURL(imageRef);
-          console.log(downloadURL);
-          await updateDoc(doc(db, "Users", currentUser.uid), {
-            imageUrl: downloadURL,
-          });
-        });
-      }
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  };
-  const handleFinlizingSignIn = async (e) => {
-    e.preventDefault();
-    const doc = await handleCreatingDoc();
-    //if there was no error in creating the doc push to main page
-    if (doc) {
-      router.push("/MainPage");
     }
   };
 
@@ -128,6 +86,47 @@ export default function Signup() {
     console.log(e.target.files[0]);
   };
 
+  const handleStrapiSignUp = async () => {
+    const url = "http://localhost:1337/api/auth/local/register";
+
+    let body = {
+      name: userInfo.name,
+      surname: userInfo.surname,
+      username: userInfo.name + userInfo.surname,
+      birthday: "1999-01-01",
+      email: email,
+      height: userInfo.height,
+      weight: userInfo.weight,
+      gym: userInfo.gym,
+      password: password,
+    };
+
+    if (filetoupload !== null) {
+      const imageRef = ref(storage, `ProfilePics/${email}`);
+      await uploadBytes(imageRef, filetoupload, {
+        contentType: "image/jpeg",
+      }).then(async (snapshot) => {
+        const downloadURL = await getDownloadURL(imageRef);
+        console.log(downloadURL);
+        body.profilepicUrl = downloadURL;
+      });
+    }
+    console.log(body);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 font-manrope bg-bgColor-secondary items-center">
@@ -268,7 +267,7 @@ export default function Signup() {
                 name="firstName"
                 type="firstName"
                 onChange={(e) =>
-                  setUserInfo({ ...userInfo, firstName: e.target.value })
+                  setUserInfo({ ...userInfo, name: e.target.value })
                 }
                 pattern="[a-zA-Z]+"
                 required
@@ -280,7 +279,7 @@ export default function Signup() {
                 name="lastName"
                 type="lastName"
                 onChange={(e) =>
-                  setUserInfo({ ...userInfo, lastName: e.target.value })
+                  setUserInfo({ ...userInfo, surname: e.target.value })
                 }
                 pattern="[a-zA-Z]+"
                 required
@@ -318,7 +317,7 @@ export default function Signup() {
               <Select
                 onValueChange={(value) => {
                   console.log(value);
-                  setUserInfo({ ...userInfo, gymId: value });
+                  setUserInfo({ ...userInfo, gym: value });
                 }}
               >
                 <SelectTrigger className="w-full border-white/10 bg-white/5 text-white/90  hover:bg-white/10 ">
@@ -326,19 +325,19 @@ export default function Signup() {
                 </SelectTrigger>
                 <SelectContent className="w-full border-white/10 bg-[rgb(25,28,31)] text-white/50 ">
                   <SelectItem
-                    value="Super Gym"
+                    value="1"
                     className="w-full  focus:bg-white/5 focus:text-white/90"
                   >
                     Super Gym
                   </SelectItem>
                   <SelectItem
-                    value="Fitness Gym"
+                    value="2"
                     className="w-full  focus:bg-white/5 focus:text-white/90"
                   >
                     Fitness Gym
                   </SelectItem>
                   <SelectItem
-                    value="Star Gym"
+                    value="3"
                     className="w-full  focus:bg-white/5 focus:text-white/90"
                   >
                     Star Gym
@@ -373,15 +372,15 @@ export default function Signup() {
             </div>
             <div className="flex flex-row w-full items-center justify-center">
               <button
-                onClick={(e) => handleFinlizingSignIn(e)}
+                onClick={(e) => handleStrapiSignUp(e)}
                 type="submit"
                 className="disabled:opacity-40 flex w-full justify-center rounded-md bg-blue-default px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-light"
                 disabled={
-                  !userInfo.firstName ||
-                  !userInfo.lastName ||
+                  !userInfo.name ||
+                  !userInfo.surname ||
                   !userInfo.weight ||
                   !userInfo.height ||
-                  !userInfo.gymId
+                  !userInfo.gym
                 }
               >
                 Finish Signing Up

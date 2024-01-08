@@ -1,28 +1,25 @@
 "use client";
-
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase";
-
 export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
-  const handlesingin = async () => {
-    try {
-      const res = await signInWithEmailAndPassword(email, password);
-      console.log(res);
-      setEmail("");
-      setPassword("");
+
+  const handleSignIn = async () => {
+    // redirect to dashboard if signed in
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+    console.log(res);
+    if (!res.error) {
       router.push("/MainPage");
-    } catch (error) {
-      console.log(error);
     }
   };
   return (
@@ -57,7 +54,6 @@ export default function Signin() {
                   id="email"
                   name="email"
                   type="email"
-                  
                   autoComplete="email"
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -98,7 +94,7 @@ export default function Signin() {
 
             <div>
               <button
-                onClick={() => handlesingin()}
+                onClick={() => handleSignIn()}
                 disabled={!email || !password}
                 className="disabled:opacity-40 flex w-full justify-center rounded-md bg-blue-default px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-light"
               >
