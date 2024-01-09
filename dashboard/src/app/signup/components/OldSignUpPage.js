@@ -320,10 +320,10 @@ export default function Signup() {
                   setUserInfo({ ...userInfo, gym: value });
                 }}
               >
-                <SelectTrigger className="w-full border-white/10 bg-white/5 text-white/90  hover:bg-white/10 ">
+                <SelectTrigger className="w-full border-white/10 bg-white/5 text-white/90  hover:bg-white/10">
                   <SelectValue placeholder="Select Your Gym" />
                 </SelectTrigger>
-                <SelectContent className="w-full border-white/10 bg-[rgb(25,28,31)] text-white/50 ">
+                <SelectContent className="w-full border-white/10 bg-[rgb(25,28,31)] text-white/50">
                   <SelectItem
                     value="1"
                     className="w-full  focus:bg-white/5 focus:text-white/90"

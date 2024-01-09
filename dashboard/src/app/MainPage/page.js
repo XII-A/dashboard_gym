@@ -8,7 +8,7 @@ import GoalComponent from "@/components/GoalComponent";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { getDate } from "@/lib/utils";
+import { getDate } from "@/lib/timeutils";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -20,6 +20,7 @@ export default function Home() {
   const [steps, setSteps] = useState(0);
 
   useEffect(() => {
+    console.log(session);
     if (session === undefined) {
       return;
     }

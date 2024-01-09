@@ -3,11 +3,17 @@ import React from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { useState } from "react";
+import { Input } from "./newUi/input";
+import InitialSignUp from "./InitialSignUp";
+import FinalSignUp from "./FinalSignUp";
+import { useEffect } from "react";
 
 type Props = {};
 
 const SignUpForm = (props: Props) => {
-  const signUpSchema = z
+  const intialSignUpForm = z
     .object({
       email: z.string().email(),
       password: z
@@ -19,55 +25,47 @@ const SignUpForm = (props: Props) => {
       message: "Passwords do not match",
       path: ["confirmPassword"],
     });
-  type TSignUpFormValues = z.infer<typeof signUpSchema>;
+  type TINSignUpFormValues = z.infer<typeof intialSignUpForm>;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<TSignUpFormValues>({
-    resolver: zodResolver(signUpSchema),
+  const [initialData, setInitialData] = useState<TINSignUpFormValues>({
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
-  const onSubmit = (data: TSignUpFormValues) => {
-    console.log(data);
-    reset();
-  };
+  useEffect(() => {
+    if (initialData.email === "") return;
+    console.log(initialData);
+    setInitialSignUp(false);
+  }, [initialData]);
+
+  const [initialSignUp, setInitialSignUp] = useState(true);
   return (
-    <div>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col justify-center gap-5"
-      >
-        <input type="email" placeholder="Email" {...register("email")} />
-        {errors.email && (
-          <p className="text-red-500">{`${errors.email.message}`}</p>
-        )}
-        <input
-          type="password"
-          placeholder="Password"
-          {...register("password")}
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 font-manrope bg-bgColor-secondary items-center">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col justify-center gap-5 my-4">
+        <div className="flex flex-row mx-auto items-center gap-5">
+          <Image
+            className="object-contain"
+            src="/AppIcon.svg"
+            alt="logo"
+            width={50}
+            height={50}
+          />
+          <div className="text-blue-default text-3xl font-bold leading-9 tracking-tight">
+            Fitness App
+          </div>
+        </div>
+        <div className="flex flex-row mx-auto items-center text-white text-xl">
+          Step {initialSignUp ? "1" : "2"} of 2
+        </div>
+      </div>
+      {initialSignUp && <InitialSignUp setInitialData={setInitialData} />}
+      {!initialSignUp && (
+        <FinalSignUp
+          email={initialData.email}
+          password={initialData.password}
         />
-        {errors.password && (
-          <p className="text-red-500">{`${errors.password.message}`}</p>
-        )}
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          {...register("confirmPassword")}
-        />
-        {errors.confirmPassword && (
-          <p className="text-red-500">{`${errors.confirmPassword.message}`}</p>
-        )}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="bg-primary text-white py-2 rounded-md disabled:opacity-50"
-        >
-          Sign Up
-        </button>
-      </form>
+      )}
     </div>
   );
 };
