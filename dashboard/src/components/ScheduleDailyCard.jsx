@@ -7,7 +7,7 @@ const ScheduleDailyCard = ({
   
   imageData,
   exerciseName,
-  exerciseTime,
+  exerciseStartTime,
   sets,
   goalSets,
 }) => {
@@ -25,7 +25,7 @@ const ScheduleDailyCard = ({
             />
             <div>
               <div className="text-l">{exerciseName}</div>
-              <div className="text-sm">{exerciseTime}</div>
+              <div className="text-sm">At {exerciseStartTime}</div>
             </div>
           </div>
           <div className="flex items-center gap-6">

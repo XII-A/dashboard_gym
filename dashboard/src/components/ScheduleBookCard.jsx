@@ -6,8 +6,11 @@ import { CiCirclePlus } from "react-icons/ci";
 const ScheduleBookCard = ({
   imageData,
   exerciseName,
-  exerciseTime,
-  TrainerName,
+  exerciseStartTime,
+  exerciseDate,
+    exerciseEndTime,
+  trainerName,
+  trainerSurname
 }) => {
   return (
     <>
@@ -24,9 +27,9 @@ const ScheduleBookCard = ({
             <div className="flex items-center gap-7">
               <div className=" gap-4">
                 <div className="text-l">{exerciseName}</div>
-                <div className="text-sm">{exerciseTime}</div>
+                <div className="text-sm">{exerciseDate} {exerciseStartTime}-{exerciseEndTime}</div>
               </div>
-              <div className="text-sm">{TrainerName}</div>
+              <div className="text-sm">{trainerName} {trainerSurname}</div>
             </div>
           </div>
           <div className="flex items-center gap-6">
@@ -34,7 +37,7 @@ const ScheduleBookCard = ({
               Book
             </div> */}
             <button>
-              <CiCirclePlus className="text-blue-text w-6 h-6" />
+              <CiCirclePlus className="text-blue-text w-6 h-6 " />
             </button>
           </div>
         </div>
