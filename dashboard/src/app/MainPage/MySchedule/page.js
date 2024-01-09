@@ -19,8 +19,8 @@ const page = () => {
         >
           <div className="w-full mt-4 ">
             <IntroCard
-              image="/workout.jpg"
-              title={"Track Your Daily Activities"}
+              image="/girl.png"
+              title={"Schedule Your Daily Workout"}
               subtitle={
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod"
               }
