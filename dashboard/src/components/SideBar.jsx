@@ -11,8 +11,7 @@ import { LuCalendarDays } from "react-icons/lu";
 import { BsBarChartLine } from "react-icons/bs";
 import { IoMdHelpCircleOutline } from "react-icons/io";
 import { HiOutlineLogout } from "react-icons/hi";
-import { signOut } from "firebase/auth";
-import { auth } from "@/app/firebase";
+import { signOut } from "next-auth/react";
 const SideBar = () => {
   const pathname = usePathname();
   const routes = [
@@ -81,10 +80,16 @@ const SideBar = () => {
         </div>
         <div className="flex flex-row items-center justify-start gap-4 text-white px-4 py-3  border border-transparent rounded-md bg-transparent w-5/6 transition duration-300 ease-linear cursor-pointer">
           <HiOutlineLogout size={20} style={{ transform: "rotate(180deg)" }} />
-          <div className="font-medium text-sm" onClick={() => {
-            signOut(auth);
-            
-          }}>Logout</div>
+          <div
+            className="font-medium text-sm"
+            onClick={() => {
+              signOut({
+                callbackUrl: "/",
+              });
+            }}
+          >
+            Logout
+          </div>
         </div>
       </div>
     </div>

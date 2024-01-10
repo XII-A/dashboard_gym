@@ -5,15 +5,116 @@ import image from "../../../public/girl.png";
 import { FaAngleRight } from "react-icons/fa";
 import ScheduleComponent from "@/components/ScheduleComponent";
 import GoalComponent from "@/components/GoalComponent";
-
-// import { signOut, useSession } from "next-auth/react";
-import { signOut } from "firebase/auth";
-import { auth } from "@/app/firebase";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { getDate } from "@/lib/timeutils";
 
 export default function Home() {
-  const [user] = useAuthState(auth);
+  const { data: session } = useSession();
+  const [workoutloading, setWorkoutloading] = useState(true);
+  const [workoutHours, setWorkoutHours] = useState(0);
+  const [stepsLoading, setStepsLoading] = useState(true);
+  const [caloriesLoading, setCaloriesLoading] = useState(true);
+  const [calories, setCalories] = useState(0);
+  const [steps, setSteps] = useState(0);
+
+  useEffect(() => {
+    console.log(session);
+    if (session === undefined) {
+      return;
+    }
+    fetch(
+      `http://localhost:1337/api/workouts?filters[$and][0][datetime][$gte]=${getDate()}T00:00:00.000Z&filters[$and][1][member][id][$eq]=${
+        session.user.user.id
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.user.jwt}`,
+        },
+      }
+    ).then((response) => {
+      response
+        .json()
+        .then((res) => res.data)
+        .then((data) => {
+          let workoutHours = 0;
+          data.forEach((item) => {
+            workoutHours += item.attributes.duration;
+          });
+          setWorkoutHours(workoutHours / 60);
+          setWorkoutloading(false);
+        });
+    });
+  }, [session]);
+
+  useEffect(() => {
+    if (session === undefined) {
+      return;
+    }
+    const date = getDate();
+    fetch(
+      `http://localhost:1337/api/steps?filters[$and][0][datetime][$gte]=${date}T00:00:00.000&filters[$and][1][member][id][$eq]=${session.user.user.id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.user.jwt}`,
+        },
+      }
+    ).then((response) => {
+      response
+        .json()
+        .then((res) => res.data)
+        .then((data) => {
+          let stepscount = 0;
+          data.forEach((item) => {
+            stepscount += item.attributes.count;
+          });
+          setSteps(stepscount);
+          setStepsLoading(false);
+        });
+    });
+  }),
+    [session];
+
+  useEffect(() => {
+    if (session === undefined) {
+      return;
+    }
+    const date = getDate();
+    console.log(date);
+    try {
+      fetch(
+        `http://localhost:1337/api/calories?filters[$and][0][dateofentry][$gte]=${date}T00:00:00.000&filters[$and][1][member][id][$eq]=${session.user.user.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.user.jwt}`,
+          },
+          cache: "no-cache",
+        }
+      ).then((response) => {
+        response
+          .json()
+          .then((res) => res.data)
+          .then((data) => {
+            let calorirescount = 0;
+            console.log(data);
+            data.forEach((item) => {
+              calorirescount += item.attributes.kcl;
+            });
+            setCalories(calorirescount);
+            setCaloriesLoading(false);
+          });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [session]);
 
   return (
     <div className="grid grid-cols-4  bg-bgColor-primary h-full ">
@@ -29,9 +130,21 @@ export default function Home() {
             />
           </div>
           <div className="flex flex-row justify-between gap-4 h-52 text-white ">
-            <InfoCard parameter={"workout"} value={"4 hours"} />
-            <InfoCard parameter={"calories"} value={"1800 kcl"} />
-            <InfoCard parameter={"steps"} value={"5000 steps"} />
+            <InfoCard
+              parameter={"workout"}
+              value={`${workoutHours} hours`}
+              loading={workoutloading}
+            />
+            <InfoCard
+              parameter={"calories"}
+              value={`${calories} kcl`}
+              loading={caloriesLoading}
+            />
+            <InfoCard
+              parameter={"steps"}
+              value={`${steps} steps`}
+              loading={stepsLoading}
+            />
           </div>
         </div>
       </div>

@@ -2,101 +2,32 @@ import React from "react";
 import Food from "./Food";
 import meatImage from "../../public/foodImages/taco.png";
 
-const foodItems = [
-  {
-    image: meatImage,
-    food: "Meat",
-    meal: "Breakfast",
-    calories: "200",
-    time: "08:00 AM",
-    carbs: "24 mg",
-  },
-  {
-    image: meatImage,
-    food: "Fish",
-    meal: "Lunch",
-    calories: "540",
-    time: "12:30 PM",
-    carbs: "12 mg",
-  },
-  {
-    image: meatImage,
-    food: "Veggies",
-    meal: "Dinner",
-    calories: "120",
-    time: "06:00 PM",
-    carbs: "30 mg",
-  },
-  {
-    image: meatImage,
-    food: "Pasta",
-    meal: "Snack",
-    calories: "300",
-    time: "03:45 PM",
-    carbs: "45 mg",
-  },
-  {
-    image: meatImage,
-    food: "Chicken",
-    meal: "Breakfast",
-    calories: "400",
-    time: "09:15 AM",
-    carbs: "20 mg",
-  },
-  {
-    image: meatImage,
-    food: "Meat",
-    meal: "Breakfast",
-    calories: "200",
-    time: "08:00 AM",
-    carbs: "24 mg",
-  },
-  {
-    image: meatImage,
-    food: "Fish",
-    meal: "Lunch",
-    calories: "540",
-    time: "12:30 PM",
-    carbs: "12 mg",
-  },
-  {
-    image: meatImage,
-    food: "Veggies",
-    meal: "Dinner",
-    calories: "120",
-    time: "06:00 PM",
-    carbs: "30 mg",
-  },
-  {
-    image: meatImage,
-    food: "Pasta",
-    meal: "Snack",
-    calories: "300",
-    time: "03:45 PM",
-    carbs: "45 mg",
-  },
-  {
-    image: meatImage,
-    food: "Chicken",
-    meal: "Breakfast",
-    calories: "400",
-    time: "09:15 AM",
-    carbs: "20 mg",
-  },
-];
+const FoodList = ({ foodList, setfoodList }) => {
+  const handleHourFormat = (timeString) => {
+    // change 09:00:00.000 to 09:00 AM
+    const timeString12hr = new Date(
+      "1970-01-01T" + timeString + "Z"
+    ).toLocaleTimeString("en-US", {
+      timeZone: "UTC",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+    });
 
-const FoodList = () => {
+    return timeString12hr;
+  };
   return (
-    <div className="flex flex-col justify-between gap-4  text-white">
-      {foodItems.map((item, index) => (
+    <div className="flex flex-col justify-between gap-4   w-full text-white">
+      {foodList.map((item, index) => (
         <Food
-          key={index}
-          image={item.image}
-          food={item.food}
-          meal={item.meal}
-          calories={item.calories}
-          time={item.time}
-          carbs={item.carbs}
+          id={item.id}
+          food={item.attributes.foodName}
+          meal={item.attributes.meal}
+          calories={item.attributes.kcl}
+          time={handleHourFormat(item.attributes.hour)}
+          carbs={item.attributes.carbs}
+          setfoodList={setfoodList}
+          foodList={foodList}
         />
       ))}
     </div>
