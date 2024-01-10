@@ -5,7 +5,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { FaTrash } from "react-icons/fa";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
-import { getCurrentUserTime } from "@/lib/utils";
+import { getCurrentUserTime } from "@/lib/timeutils";
 const Food = ({
   food,
   meal,
