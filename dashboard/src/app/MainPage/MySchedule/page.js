@@ -12,7 +12,7 @@ const page = () => {
     <div className="grid grid-cols-4">
       <div className="col-span-3">
         <div
-          className="flex-col w-full h-[100vh-5rem] overflow-hidden p-4"
+          className="flex-col w-full  overflow-hidden p-4"
           style={{
             height: "calc(100vh - 5rem)",
           }}
@@ -29,120 +29,128 @@ const page = () => {
           <div className="text-2xl text-gray-50 px-2 pt-5">
             Edit your daily workout
           </div>
-            <div className="px-2 pt-4 ">
-            <ScheduleDayPicker day={"Monday"}/>
-            </div>
-          <div className="mt-3 flex flex-col gap-4 overflow-y-scroll h-[29%] px-2 py-1 ">
-            <ScheduleDailyCard
-              imageData={"/back&Stretch.png"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseStartTime={"08:00"}
-            />
-            <ScheduleDailyCard
-              imageData={"/back&Stretch.png"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseStartTime={"08:00"}
-            />
-            <ScheduleDailyCard
-              imageData={"/back&Stretch.png"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseStartTime={"08:00"}
-            />
-            <ScheduleDailyCard
-              imageData={"/back&Stretch.png"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseStartTime={"08:00"}
-            />
-            <ScheduleDailyCard
-              imageData={"/back&Stretch.png"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseStartTime={"08:00"}
-            />
+          <div className="px-2 pt-4 ">
+            <ScheduleDayPicker day={"Monday"} />
           </div>
-          <div className="text-2xl text-gray-50 pt-3 px-2 ">Book a course</div>
-          <div className="mt-3 flex flex-col gap-4 overflow-y-scroll h-[28%] px-2 py-1 ">
-            <ScheduleBookCard
-              imageData={"/back&Stretch.png"}
-              day={"Monday"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseDate={"1/9/2024"}
-              exerciseStartTime={"08:00"}
-              exerciseEndTime={"09:00"}
-              trainerName={"Dwayne"}
-              trainerSurname={"Johnson"}
-            />
-            <ScheduleBookCard
-              imageData={"/back&Stretch.png"}
-              day={"Monday"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseDate={"1/9/2024"}
-              exerciseStartTime={"08:00"}
-              exerciseEndTime={"09:00"}
-              trainerName={"Dwayne"}
-              trainerSurname={"Johnson"}
-            />
-            <ScheduleBookCard
-              imageData={"/back&Stretch.png"}
-              day={"Monday"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseDate={"1/9/2024"}
-              exerciseStartTime={"08:00"}
-              exerciseEndTime={"09:00"}
-              trainerName={"Dwayne"}
-              trainerSurname={"Johnson"}
-            />
-            <ScheduleBookCard
-              imageData={"/back&Stretch.png"}
-              day={"Monday"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseDate={"1/9/2024"}
-              exerciseStartTime={"08:00"}
-              exerciseEndTime={"09:00"}
-              trainerName={"Dwayne"}
-              trainerSurname={"Johnson"}
-            />
-            <ScheduleBookCard
-              imageData={"/back&Stretch.png"}
-              day={"Monday"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseDate={"1/9/2024"}
-              exerciseStartTime={"08:00"}
-              exerciseEndTime={"09:00"}
-              trainerName={"Dwayne"}
-              trainerSurname={"Johnson"}
-            />
-            <ScheduleBookCard
-              imageData={"/back&Stretch.png"}
-              day={"Monday"}
-              sets={"20"}
-              goalSets={"30"}
-              exerciseName={"Stretch"}
-              exerciseDate={"1/9/2024"}
-              exerciseStartTime={"08:00"}
-              exerciseEndTime={"09:00"}
-              trainerName={"Dwayne"}
-              trainerSurname={"Johnson"}
-            />
+          <div
+            style={{
+              height: "calc(100vh - 30rem)",
+            }}
+          >
+            <div className="mt-3 flex flex-col gap-4 overflow-y-scroll h-1/2 px-2 py-1 ">
+              <ScheduleDailyCard
+                imageData={"/back&Stretch.png"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseStartTime={"08:00"}
+              />
+              <ScheduleDailyCard
+                imageData={"/back&Stretch.png"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseStartTime={"08:00"}
+              />
+              <ScheduleDailyCard
+                imageData={"/back&Stretch.png"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseStartTime={"08:00"}
+              />
+              <ScheduleDailyCard
+                imageData={"/back&Stretch.png"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseStartTime={"08:00"}
+              />
+              <ScheduleDailyCard
+                imageData={"/back&Stretch.png"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseStartTime={"08:00"}
+              />
+            </div>
+            <div className="text-2xl text-gray-50 pt-3 px-2 ">
+              Book a course
+            </div>
+            <div className="mt-3 flex flex-col gap-4 overflow-y-scroll h-1/2 px-2 py-1 ">
+              <ScheduleBookCard
+                imageData={"/back&Stretch.png"}
+                day={"Monday"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseDate={"1/9/2024"}
+                exerciseStartTime={"08:00"}
+                exerciseEndTime={"09:00"}
+                trainerName={"Dwayne"}
+                trainerSurname={"Johnson"}
+              />
+              <ScheduleBookCard
+                imageData={"/back&Stretch.png"}
+                day={"Monday"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseDate={"1/9/2024"}
+                exerciseStartTime={"08:00"}
+                exerciseEndTime={"09:00"}
+                trainerName={"Dwayne"}
+                trainerSurname={"Johnson"}
+              />
+              <ScheduleBookCard
+                imageData={"/back&Stretch.png"}
+                day={"Monday"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseDate={"1/9/2024"}
+                exerciseStartTime={"08:00"}
+                exerciseEndTime={"09:00"}
+                trainerName={"Dwayne"}
+                trainerSurname={"Johnson"}
+              />
+              <ScheduleBookCard
+                imageData={"/back&Stretch.png"}
+                day={"Monday"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseDate={"1/9/2024"}
+                exerciseStartTime={"08:00"}
+                exerciseEndTime={"09:00"}
+                trainerName={"Dwayne"}
+                trainerSurname={"Johnson"}
+              />
+              <ScheduleBookCard
+                imageData={"/back&Stretch.png"}
+                day={"Monday"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseDate={"1/9/2024"}
+                exerciseStartTime={"08:00"}
+                exerciseEndTime={"09:00"}
+                trainerName={"Dwayne"}
+                trainerSurname={"Johnson"}
+              />
+              <ScheduleBookCard
+                imageData={"/back&Stretch.png"}
+                day={"Monday"}
+                sets={"20"}
+                goalSets={"30"}
+                exerciseName={"Stretch"}
+                exerciseDate={"1/9/2024"}
+                exerciseStartTime={"08:00"}
+                exerciseEndTime={"09:00"}
+                trainerName={"Dwayne"}
+                trainerSurname={"Johnson"}
+              />
+            </div>
           </div>
         </div>
       </div>
