@@ -4,7 +4,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Input } from "./newUi/input";
 import { storage } from "@/app/firebase";
 import { getDownloadURL, uploadBytes } from "firebase/storage";
@@ -37,6 +37,31 @@ type Props = {
 const FinalSignUp = ({ email, password }: Props) => {
   const reftoImage = useRef(null);
   const [image, setImage] = useState(null);
+  const [gyms, setGyms] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/gyms`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        res.json().then((data) => {
+          setGyms(data.data);
+          setLoading(false);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log(gyms);
+  }, [gyms]);
 
   const handleImageInput = (e) => {
     const file = e.target.files[0];
@@ -77,10 +102,10 @@ const FinalSignUp = ({ email, password }: Props) => {
       .max(10000),
     gymId: z.string().max(2),
     birthDate: z.coerce.date().max(new Date()),
-    // stepsGoal: z.coerce.number().min(0).max(100000),
-    // caloriesGoal: z.coerce.number().min(0).max(100000),
-    // workoutsGoal: z.coerce.number().min(0).max(100000),
-    // waterGoal: z.coerce.number().min(0).max(100000),
+    stepsGoal: z.coerce.number().min(0).max(100000),
+    caloriesGoal: z.coerce.number().min(0).max(100000),
+    workoutsGoal: z.coerce.number().min(0).max(100000),
+    waterGoal: z.coerce.number().min(0).max(100000),
   });
   type TFinalSignUpFormValues = z.infer<typeof finalSignUpForm>;
   const form = useForm<TFinalSignUpFormValues>({
@@ -127,9 +152,10 @@ const FinalSignUp = ({ email, password }: Props) => {
       gym: data.gymId,
       profilepicUrl: data.profilePicture,
       username: email,
-      // stepsGoal: data.stepsGoal,
-      // caloriesGoal: data.caloriesGoal,
-      // workoutsGoal: data.workoutsGoal,
+      stepsGoal: data.stepsGoal,
+      caloriesGoal: data.caloriesGoal,
+      workoutsGoal: data.workoutsGoal,
+      waterGoal: data.waterGoal,
     };
     // console.log(user);
     const res = await fetch("/api/auth/register", {
@@ -278,6 +304,90 @@ const FinalSignUp = ({ email, password }: Props) => {
             />
           </div>
         </div>
+        <div className="flex flex-row gap-2">
+          <div className="flex flex-col gap-y-2">
+            <FormField
+              control={form.control}
+              name="stepsGoal"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white">Steps Goal:</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="steps"
+                      {...field}
+                      className="bg-white/5 hover:bg-white/10 focus:ring-opacity-0 focus:outline-none placeholder:text-white/50 text-white/90 shadow-sm ring-1 ring-inset ring-white/10"
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-col gap-y-2">
+            <FormField
+              control={form.control}
+              name="caloriesGoal"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white">Calories Goal:</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="calories"
+                      {...field}
+                      className="bg-white/5 hover:bg-white/10 focus:ring-opacity-0 focus:outline-none placeholder:text-white/50 text-white/90 shadow-sm ring-1 ring-inset ring-white/10"
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+        <div className="flex flex-row gap-2">
+          <div className="flex flex-col gap-y-2">
+            <FormField
+              control={form.control}
+              name="workoutsGoal"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white">Workouts Goal:</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="workouts"
+                      {...field}
+                      className="bg-white/5 hover:bg-white/10 focus:ring-opacity-0 focus:outline-none placeholder:text-white/50 text-white/90 shadow-sm ring-1 ring-inset ring-white/10"
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-col gap-y-2">
+            <FormField
+              control={form.control}
+              name="waterGoal"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white">Water Goal:</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="water"
+                      {...field}
+                      className="bg-white/5 hover:bg-white/10 focus:ring-opacity-0 focus:outline-none placeholder:text-white/50 text-white/90 shadow-sm ring-1 ring-inset ring-white/10"
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
         <div className="w-full">
           <FormField
             control={form.control}
@@ -288,6 +398,7 @@ const FinalSignUp = ({ email, password }: Props) => {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={loading}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full border-white/10 bg-white/5 text-white/90  hover:bg-white/10">
@@ -295,24 +406,17 @@ const FinalSignUp = ({ email, password }: Props) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="w-full border-white/10 bg-[rgb(25,28,31)] text-white/50">
-                    <SelectItem
-                      value="1"
-                      className="w-full  focus:bg-white/5 focus:text-white/90"
-                    >
-                      Super Gym
-                    </SelectItem>
-                    <SelectItem
-                      value="2"
-                      className="w-full  focus:bg-white/5 focus:text-white/90"
-                    >
-                      Fitness Gym
-                    </SelectItem>
-                    <SelectItem
-                      value="3"
-                      className="w-full  focus:bg-white/5 focus:text-white/90"
-                    >
-                      Star Gym
-                    </SelectItem>
+                    {gyms?.map((gym) => {
+                      return (
+                        <SelectItem
+                          key={gym.id}
+                          value={`${gym.id}`}
+                          className="w-full  focus:bg-white/5 focus:text-white/90"
+                        >
+                          {gym.attributes.name}
+                        </SelectItem>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
 
