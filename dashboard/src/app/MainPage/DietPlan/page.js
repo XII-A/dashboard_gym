@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { GoPlus } from "react-icons/go";
 import DietPlanModal from "@/components/Modals/DietPlanModal";
+import ScheduleDayPicker from "@/components/ScheduleDayPicker";
 const daysOfWeek = [
   "Sunday",
   "Monday",
@@ -81,38 +82,12 @@ const page = () => {
               />
             </div>
             <div className="flex flex-row justify-between w-full items-center my-2 ">
-              <div className="text-4xl font-medium text-white px-2 ">
-                {pickedDay}
-              </div>
-              <div>
-                <select
-                  id="days"
-                  className="bg-white/5 text-white/60 text-sm rounded-lg block w-full p-2.5"
-                  onChange={(e) => {
-                    setPickedDay(e.target.value);
-                  }}
-                >
-                  <option
-                    selected
-                    className="bg-[#2C3034] text-white/60 text-sm"
-                  >
-                    {pickedDay}
-                  </option>
-                  {daysOfWeek.map((day) => {
-                    if (day !== pickedDay) {
-                      return (
-                        <option
-                          key={day}
-                          value={day}
-                          className="bg-[#2C3034] text-white/60 text-sm"
-                        >
-                          {day}
-                        </option>
-                      );
-                    }
-                  })}
-                </select>
-              </div>
+              <ScheduleDayPicker
+                selectedDay={pickedDay}
+                setSelectedDay={setPickedDay}
+                daysOfWeek={daysOfWeek}
+                turnOnButton={false}
+              />
             </div>
 
             <div className="grid grid-cols-5   w-11/12 text-blue-default  pl-6">
@@ -133,7 +108,7 @@ const page = () => {
                 <div className="text-white text-center">Loading...</div>
               ) : (
                 <>
-                  <FoodList foodList={foodList} setfoodList = {setfoodList} />
+                  <FoodList foodList={foodList} setfoodList={setfoodList} />
                   <div className="w-full flex flex-row  justify-center">
                     <button
                       className="bg-blue-default text-white/80 p-2 rounded-full"

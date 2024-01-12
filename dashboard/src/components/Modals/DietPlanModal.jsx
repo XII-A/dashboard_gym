@@ -109,6 +109,8 @@ const DietPlanModal = ({
         setTimeout(() => {
           setErrorMsg(null);
         }, 3000);
+        setAddLoading(false);
+        return;
       }
       setfoodList([...foodList, data.data]);
       setAddLoading(false);

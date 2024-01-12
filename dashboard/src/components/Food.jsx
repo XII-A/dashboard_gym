@@ -5,7 +5,8 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { FaTrash } from "react-icons/fa";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
-import { getCurrentUserTime } from "@/lib/timeutils";
+import { getDate } from "../lib/timeutils";
+
 const Food = ({
   food,
   meal,
@@ -22,22 +23,26 @@ const Food = ({
   const [deleteLoading, setDeleteLoading] = React.useState(false);
   const handlekcals = async () => {
     setLoading(true);
-    const dateofentry = getCurrentUserTime();
-    console.log(dateofentry);
-    const res = await fetch("http://localhost:1337/api/calories", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.user.jwt}`,
-      },
-      body: JSON.stringify({
-        data: {
-          kcl: parseInt(calories),
-          member: session.user.user.id,
-          dateofentry: dateofentry,
+    const date = getDate();
+    console.log(date);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/calories`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.user.jwt}`,
         },
-      }),
-    });
+        body: JSON.stringify({
+          data: {
+            kcl: parseInt(calories),
+            member: session.user.user.id,
+            date: date,
+            isBurnedCalories: false,
+          },
+        }),
+      }
+    );
     const data = await res.json();
     console.log(data);
     setLoading(false);
@@ -50,13 +55,16 @@ const Food = ({
 
   const handleDelete = async () => {
     setDeleteLoading(true);
-    const res = await fetch(`http://localhost:1337/api/diet-plans/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.user.jwt}`,
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/diet-plans/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.user.jwt}`,
+        },
+      }
+    );
     const data = await res.json();
     setDeleteLoading(false);
     setfoodList(foodList.filter((item) => item.id !== id));

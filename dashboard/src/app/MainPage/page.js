@@ -9,6 +9,17 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { getDate } from "@/lib/timeutils";
+import { getWeek } from "@/lib/timeutils";
+import { getDayFromDate } from "@/lib/timeutils";
+import { CiDumbbell } from "react-icons/ci";
+import { RiFireLine } from "react-icons/ri";
+import { IoFootstepsOutline } from "react-icons/io5";
+import dynamic from "next/dynamic";
+
+const DailyChartComponent = dynamic(
+  () => import("@/components/DailyChartComponent"),
+  { ssr: false }
+);
 
 export default function Home() {
   const { data: session } = useSession();
@@ -18,14 +29,42 @@ export default function Home() {
   const [caloriesLoading, setCaloriesLoading] = useState(true);
   const [calories, setCalories] = useState(0);
   const [steps, setSteps] = useState(0);
-
+  const [weekCalories, setWeekCalories] = useState([]);
+  const [weekWorkout, setWeekWorkout] = useState([]);
+  const [weekSteps, setWeekSteps] = useState([]);
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const styles = [
+    {
+      bgColor: "#F97316",
+      iconColor: "#EA580C",
+      icon: <RiFireLine className="w-8 h-8" />,
+    },
+    {
+      bgColor: "#06B6D4",
+      iconColor: "#0891B2",
+      icon: <CiDumbbell className="w-8 h-8" />,
+    },
+    {
+      bgColor: "#8B5CF6",
+      iconColor: "#6D28D9",
+      icon: <IoFootstepsOutline className="w-8 h-8" />,
+    },
+  ];
   useEffect(() => {
     console.log(session);
     if (session === undefined) {
       return;
     }
     fetch(
-      `http://localhost:1337/api/workouts?filters[$and][0][datetime][$gte]=${getDate()}T00:00:00.000Z&filters[$and][1][member][id][$eq]=${
+      `http://localhost:1337/api/workouts?filters[$and][0][date][$eq]=${getDate()}&filters[$and][1][member][id][$eq]=${
         session.user.user.id
       }`,
       {
@@ -56,7 +95,7 @@ export default function Home() {
     }
     const date = getDate();
     fetch(
-      `http://localhost:1337/api/steps?filters[$and][0][datetime][$gte]=${date}T00:00:00.000&filters[$and][1][member][id][$eq]=${session.user.user.id}`,
+      `http://localhost:1337/api/steps?filters[$and][0][date][$gte]=${date}&filters[$and][1][member][id][$eq]=${session.user.user.id}`,
       {
         method: "GET",
         headers: {
@@ -88,7 +127,7 @@ export default function Home() {
     console.log(date);
     try {
       fetch(
-        `http://localhost:1337/api/calories?filters[$and][0][dateofentry][$gte]=${date}T00:00:00.000&filters[$and][1][member][id][$eq]=${session.user.user.id}`,
+        `http://localhost:1337/api/calories?filters[$and][0][date][$eq]=${date}&filters[$and][1][member][id][$eq]=${session.user.user.id}&filters[$and][2][isBurnedCalories][$eq]=false`,
         {
           method: "GET",
           headers: {
@@ -114,6 +153,112 @@ export default function Home() {
     } catch (err) {
       console.log(err);
     }
+  }, [session]);
+
+  useEffect(() => {
+    if (session === undefined) {
+      return;
+    }
+    const [firstDay, lastDay] = getWeek();
+    console.log(firstDay, lastDay);
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/calorie/weekly?startDate=${firstDay}&endDate=${lastDay}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.user.jwt}`,
+        },
+      }
+    ).then((response) => {
+      response.json().then((res) => {
+        //check if the date day is equal to the day of the week and then add the calories to the array of calories if not add 0
+        const calories = [];
+        daysOfWeek.forEach((day) => {
+          const dayCalories = res.find(
+            (item) => getDayFromDate(item.date) === day
+          );
+          if (dayCalories) {
+            calories.push(dayCalories.total_calories);
+          } else {
+            calories.push(0);
+          }
+        });
+        console.log(calories);
+        setWeekCalories(calories);
+      });
+    });
+  }, [session]);
+
+  useEffect(() => {
+    if (session === undefined) {
+      return;
+    }
+    const [firstDay, lastDay] = getWeek();
+    console.log(firstDay, lastDay);
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/workout/weekly?startDate=${firstDay}&endDate=${lastDay}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.user.jwt}`,
+        },
+      }
+    ).then((response) => {
+      response.json().then((res) => {
+        //check if the date day is equal to the day of the week and then add the calories to the array of calories if not add 0
+        const workout = [];
+        daysOfWeek.forEach((day) => {
+          const daySteps = res.find(
+            (item) => getDayFromDate(item.date) === day
+          );
+          if (daySteps) {
+            workout.push(daySteps.total_duration / 60);
+          } else {
+            workout.push(0);
+          }
+        });
+        console.log(workout);
+        setWeekWorkout(workout);
+      });
+    });
+  }, [session]);
+
+  useEffect(() => {
+    if (session === undefined) {
+      return;
+    }
+    const [firstDay, lastDay] = getWeek();
+    console.log(firstDay, lastDay);
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/step/weekly?startDate=${firstDay}&endDate=${lastDay}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.user.jwt}`,
+        },
+      }
+    ).then((response) => {
+      response.json().then((res) => {
+        //check if the date day is equal to the day of the week and then add the calories to the array of calories if not add 0
+        const steps = [];
+        daysOfWeek.forEach((day) => {
+          const daySteps = res.find(
+            (item) => getDayFromDate(item.date) === day
+          );
+          if (daySteps) {
+            steps.push(daySteps.total_steps);
+          } else {
+            steps.push(0);
+          }
+        });
+        console.log(steps);
+
+        setWeekSteps(steps);
+      });
+    });
   }, [session]);
 
   return (
@@ -145,6 +290,43 @@ export default function Home() {
               value={`${steps} steps`}
               loading={stepsLoading}
             />
+          </div>
+          <div
+            className="flex flex-row justify-between mt-4 gap-x-4 "
+            style={{
+              height: "calc(100vh - 36rem)",
+            }}
+          >
+            <div className="w-full">
+              <DailyChartComponent
+                data={weekWorkout}
+                label={"Workout Hours"}
+                bgColor={styles[1].bgColor}
+                iconColor={styles[1].iconColor}
+                icon={styles[1].icon}
+                title={"Workout Analysis"}
+              />
+            </div>
+            <div className="w-full ">
+              <DailyChartComponent
+                data={weekCalories}
+                label={"Calories"}
+                bgColor={styles[0].bgColor}
+                iconColor={styles[0].iconColor}
+                icon={styles[0].icon}
+                title={"Calories Analysis"}
+              />
+            </div>
+            <div className="w-full ">
+              <DailyChartComponent
+                data={weekSteps}
+                label={"Steps"}
+                bgColor={styles[2].bgColor}
+                iconColor={styles[2].iconColor}
+                icon={styles[2].icon}
+                title={"Steps Analysis"}
+              />
+            </div>
           </div>
         </div>
       </div>
