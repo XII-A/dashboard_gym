@@ -20,6 +20,10 @@ declare module "next-auth" {
         user_id: string;
         profilepicUrl: string;
         height: number;
+        caloriesGoal: number | string;
+        workoutsGoal: number | string;
+        stepsGoal: number | string;
+        waterGoal: number | string;
       };
     };
   }

@@ -72,7 +72,7 @@ const page = () => {
         setLoadingSchedule(false);
       }
     }
-  }, [selectedDay]);
+  }, [selectedDay , session]);
 
   useEffect(() => {
     if (session !== undefined) {
@@ -128,7 +128,7 @@ const page = () => {
         console.log(err);
       }
     }
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     console.log("the courses are: ", courses);

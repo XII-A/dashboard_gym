@@ -332,16 +332,10 @@ export default function Home() {
       </div>
       <div className="col-span-1  py-2  min-h-full flex flex-col items-center">
         {/* My Schedule */}
-        <div className="w-full  flex flex-col h-1/2">
+        <div className="w-full  flex flex-col h-full">
           {/* Header */}
           <div className="flex flex-row items-center justify-between px-2">
             <div className="text-xl font-medium text-white">My Schedule</div>
-            <button className="text-blue-600 flex flex-row  items-center justify-between">
-              <div className="text-sm mr-1">View All</div>
-              <div>
-                <FaAngleRight />
-              </div>
-            </button>
           </div>
           {/* Body */}
           <div className="mt-3 flex flex-col gap-4 overflow-y-scroll px-2 pb-1 h-full ">
@@ -359,39 +353,23 @@ export default function Home() {
               exerciseName={"Stretch"}
               exerciseTime={"At 08:00"}
             />
+            <ScheduleComponent
+              imageData={"/back&Stretch.png"}
+              day={"Monday"}
+              sets={"20 sets"}
+              exerciseName={"Stretch"}
+              exerciseTime={"At 08:00"}
+            />
+            <ScheduleComponent
+              imageData={"/back&Stretch.png"}
+              day={"Monday"}
+              sets={"20 sets"}
+              exerciseName={"Stretch"}
+              exerciseTime={"At 08:00"}
+            />
           </div>
         </div>
         {/* Goals */}
-        <div className="w-full flex flex-col h-1/2 ">
-          {/* Header */}
-          <div className="flex flex-row items-center justify-between px-2 mt-2">
-            <div className="text-xl font-medium text-white">Goals</div>
-            <button className="text-blue-600 flex flex-row  items-center justify-between">
-              <div className="text-sm mr-1">View All</div>
-              <div>
-                <FaAngleRight />
-              </div>
-            </button>
-          </div>
-          {/* Body */}
-          <div className="mt-3 flex flex-col gap-4 overflow-y-scroll px-2 pb-4">
-            <GoalComponent
-              exerciseName={"ABS & Stretch"}
-              exerciseTime={"Saturday, April 14 | 08:00 AM"}
-              sets={"30Min/day"}
-            />
-            <GoalComponent
-              exerciseName={"ABS & Stretch"}
-              exerciseTime={"Saturday, April 14 | 08:00 AM"}
-              sets={"30Min/day"}
-            />
-            <GoalComponent
-              exerciseName={"ABS & Stretch"}
-              exerciseTime={"Saturday, April 14 | 08:00 AM"}
-              sets={"30Min/day"}
-            />
-          </div>
-        </div>
       </div>
     </div>
   );

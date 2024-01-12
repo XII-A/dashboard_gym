@@ -60,7 +60,7 @@ const page = () => {
         console.log(err);
       }
     }
-  }, [pickedDay]);
+  }, [pickedDay, session]);
 
   return (
     <>

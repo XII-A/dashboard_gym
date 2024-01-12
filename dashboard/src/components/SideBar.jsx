@@ -20,21 +20,21 @@ const SideBar = () => {
       name: "Overview",
       icon: <HiOutlineSquares2X2 size={20} />,
     },
-    {
-      path: "/MainPage/Workout",
-      name: "Workout",
-      icon: <CiDumbbell size={20} />,
-    },
+    // {
+    //   path: "/MainPage/Workout",
+    //   name: "Workout",
+    //   icon: <CiDumbbell size={20} />,
+    // },
     {
       path: "/MainPage/DietPlan",
       name: "Diet Plan",
       icon: <PiNotepad size={20} />,
     },
-    {
-      path: "/MainPage/Goals",
-      name: "Goals",
-      icon: <SlBadge size={20} />,
-    },
+    // {
+    //   path: "/MainPage/Goals",
+    //   name: "Goals",
+    //   icon: <SlBadge size={20} />,
+    // },
     {
       path: "/MainPage/MySchedule",
       name: "My Schedule",
